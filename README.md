@@ -6,29 +6,29 @@ These components allow us to reuse code within our project, and throughout other
 
 #The Anatomy of an Angular component - a reference.
 ```javascript
-	var app = angular.module('NAME-OF-APP', []);
+var app = angular.module('NAME-OF-APP', []);
 
-  //our component's name 'nameOfComponent' will be 
-	//parsed to show up as 'name-of-component' in our HTML.
-	app.component('nameOfComponent', {
-			bindings: {
-				passedValue: '<' //Bindings allow us to pass values from a parent scope into the child component
-			},
-			template: '<div><h1>Hello World</h1></div>', 
-			  // the template can take raw HTML, or more commonly templateUrl: accepts a file path that leads to an HTML file.
-			  //templateUrl: 'app/views/componentView.html',
-			controller: function($scope) { 
-			//We can create a controller in our component, We can also utilize lifecycle hooks 
-			  var vm = this;
-  			this.$onInit = function() {
-				  vm.test = 'am I alive?!';
-  	    }
-			},
-			//Controller As syntax is supported by default the controller as value will be $ctrl
-			controllerAs: '$ctrl'
-		}
+//our component's name 'nameOfComponent' will be 
+//parsed to show up as 'name-of-component' in our HTML.
+app.component('nameOfComponent', {
+	bindings: {
+		passedValue: '<' //Bindings allow us to pass values from a parent scope into the child component
+	},
+	template: '<div><h1>Hello World</h1></div>', 
+	  // the template can take raw HTML, or more commonly templateUrl: accepts a file path that leads to an HTML file.
+	  //templateUrl: 'app/views/componentView.html',
+	controller: function($scope) { 
+		//We can create a controller in our component, We can also utilize lifecycle hooks 
+	  	var vm = this;
+	  	this.$onInit = function() {
+		  vm.test = 'am I alive?!';
+      		}
+	},
+	//Controller As syntax is supported by default the controller as value will be $ctrl
+	controllerAs: '$ctrl'
+	}
 
-	})
+})
 ```
 
 ###Note:
@@ -56,16 +56,16 @@ var app = angular.module('mycomponents', []);
 You are familiar with creating controllers, factories, and services already and the markup for starting a component looks very similar however you will simply provide an object as the second argument instead of a function. 
 
 ```javascript
-  app.component('camelCase',{
-    //component stuff here...
-  });
+app.component('camelCase',{
+//component stuff here...
+});
 ```
 
 ####Dont get tripped up.
 Despite looking just like a controller or a service there are a few things to be cautious of when working with components. The first is naming conventions. Remember that Javascript conventions say we should use `camelCase` while HTML conventions state that we should use `kabob-case`. Angular trying to keep with best practices holds true to these conventions so whatever you name your component here will later be called in your HTML using kabob-case
 
 ```html
-  <camel-case></camel-case>
+<camel-case></camel-case>
 ```
 
 Angular handles the conversion of your naming process itself so you don't have to worry about it, however if you didn't know it was happening you would have a very hard time debugging your code.  
@@ -76,15 +76,15 @@ Angular handles the conversion of your naming process itself so you don't have t
 Now that we have created our basic setup lets focus on building a component that we can put on a <button></button> element that will show a loading gif while we wait for our data from an $http request. Lets create a new component on our app and lets give it the name 'pending'. We then will setup the basic anatomy of a component.
 
 ```javascript
-    controller: function(){
-      //Code Here
-    }
+controller: function(){
+//Code Here
+}
 ```
 
 Notice a component is a really an object, and on this object we are adding some very specific keys that are specific to components, we just need to take advantage of them.
 
 ```html
-	<button class="btn btn-primary" ng-click="$ctrl.getData()"> Load Data </button>
+<button class="btn btn-primary" ng-click="$ctrl.getData()"> Load Data </button>
 ```
 
 #####A note about scope
@@ -122,12 +122,12 @@ Go ahead and setup a brand new component and lets call it 'notify'. The setup he
 Copy and paste this code into your controllers $onInit function. This is a shim that should setup notifications on most common browsers.
 
 ```javascript
-	var Notification = window.Notification || window.mozNotification ||   window.webkitNotification;
-	  
-	//Before notifications will work you have to get permission
-  Notification.requestPermission(function (permission) {
-		//console.log(permission);
-	});
+var Notification = window.Notification || window.mozNotification ||   window.webkitNotification;
+  
+//Before notifications will work you have to get permission
+Notification.requestPermission(function (permission) {
+	//console.log(permission);
+});
 ```
 
 Moving right along if you look console.log(Notification) you would see that in each of these browsers Notification is a constructor. Remember in Js constructors use an initial capital letter. This means that for each notification we will be creating an 'new Notification()' instance. This constructor is setup to take in two parameters a string for its title and then an object with the rest of its properties. (title, {body: '', icon: ''}). Practice getting these notifications to work first with some hard coded values, then think about what you have learned to pass in variables that are from your controller. 
@@ -136,25 +136,25 @@ Moving right along if you look console.log(Notification) you would see that in e
 
 ```javascript
   this.show = function() {
-				var instance = new Notification(scope.title, { body: 'Testing', icon: 'https://boisecodeworks.com/assets/img/logos/boisecodeworks-logo-lg.png' });
-        //You can take advantage of the notification api
-        //here are some of the hooks you can tie into
-				instance.onclick = function () {
-					// Something to do
-				};
-				
-				instance.onerror = function () {
-					// Something to do
-				};
-				
-				instance.onshow = function () {
-					// Something to do
-				};
-				
-				instance.onclose = function () {
-					// Something to do
-				};
-			};
+	var instance = new Notification('Testing', { body: 'A simple test', icon: 'https://boisecodeworks.com/assets/img/logos/boisecodeworks-logo-lg.png' });
+	//You can take advantage of the notification api
+	//here are some of the hooks you can tie into
+	instance.onclick = function () {
+		// Something to do
+	};
+	
+	instance.onerror = function () {
+		// Something to do
+	};
+	
+	instance.onshow = function () {
+		// Something to do
+	};
+	
+	instance.onclose = function () {
+		// Something to do
+	};
+};
 ```
 
 *Hints
